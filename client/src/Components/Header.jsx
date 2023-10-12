@@ -37,15 +37,15 @@ function Header() {
           </Link>
           <Link to="/profile">
             {currentUser ? (
-              // <img className="rounded-full h-8 w-8 object-cover ring-2 p-1 ring-gray-300 dark:ring-gray-500" src={currentUser.avatar} alt="profile" />
-              <div class="relative">
-                <img
-                  class="w-8 h-8 rounded-full"
-                  src={currentUser.avatar}
-                  alt="profile"
-                />
-                <span class="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
-              </div>
+              <img className="rounded-full h-8 w-8 object-cover ring-2 p-1 ring-gray-300 dark:ring-gray-500" src={currentUser.avatar} alt="profile" />
+              // <div className="relative">
+              //   <img
+              //     className="w-8 h-8 rounded-full"
+              //     src={currentUser.avatar}
+              //     alt="profile"
+              //   />
+              //   <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+              // </div>
             ) : (
               <li className="text-lg font-bold  text-slate-700 hover:underline cursor-pointer">
                 Sign in
