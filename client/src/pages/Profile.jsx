@@ -13,15 +13,18 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 function Profile() {
-  const { currentUser,loading,error } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setfile] = useState(undefined);
   const [fileperc, setFilePerc] = useState(0);
   const [fileuploadError, SetFileuploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const [updatesuccess,setUpdatedSucess]=useState(false)
+  const [updatesuccess, setUpdatedSucess] = useState(false);
   const dispatch = useDispatch();
   // console.log(formData);
   // console.log(formData);
@@ -86,10 +89,26 @@ function Profile() {
         return;
       }
       dispatch(updateUserSuccess(data));
-      setUpdatedSucess(true)
-      
+      setUpdatedSucess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+
+  const handleDeleteUser = async (e) => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success == false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
   return (
@@ -148,23 +167,29 @@ function Profile() {
           placeholder="Password"
           onChange={handleChange}
         />
-        <button disabled={loading}
+        <button
+          disabled={loading}
           // type="button"
           className=" uppercase text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-bold rounded-lg text-lg px-5 py-3 text-center mr-2 mb-2"
         >
-          {loading ? 'Loading...' : 'Update'}
+          {loading ? "Loading..." : "Update"}
         </button>
       </form>
       <div className="flex justify-between mt-5 ">
-        <span className="text-red-700 cursor-pointer font-semibold">
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer font-semibold"
+        >
           Delete Account
         </span>
         <span className="text-red-700 cursor-pointer font-semibold">
           Sign out
         </span>
       </div>
-   <p className="text-red-700 mt-5 font-bold"> {error ? error : '' }</p>
-   <p className="text-green-700 font-bold">{updatesuccess?"User is updated successfully" :'' } </p>
+      <p className="text-red-700 mt-5 font-bold"> {error ? error : ""}</p>
+      <p className="text-green-700 font-bold">
+        {updatesuccess ? "User is updated successfully" : ""}{" "}
+      </p>
     </div>
   );
 }
