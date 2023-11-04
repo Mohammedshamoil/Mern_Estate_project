@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { useRef } from "react";
 import {
   getDownloadURL,
-  getStorage,
+  // getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { storage  } from "../firebase";
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null);
@@ -31,7 +31,7 @@ function Profile() {
   }, [file]);
   const handleFileupload = (file) => {
     //  app from FirebaseError.js
-    const storage = getStorage(app);
+    // const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -51,6 +51,7 @@ function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => 
           setFormData({ ...formData, avatar: downloadURL })
+          // console.log('File available at', downloadURL)
         );
       }
     );
