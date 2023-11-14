@@ -8,7 +8,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
-import { app} from "../firebase";
+import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import {
   updateUserStart,
@@ -22,7 +22,7 @@ import {
   signoutUserSuccess,
 } from "../redux/user/userSlice";
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
@@ -32,6 +32,8 @@ function Profile() {
   const [formData, setFormData] = useState({});
   const [updatesuccess, setUpdatedSucess] = useState(false);
   const dispatch = useDispatch();
+  const [showListing, ShowErrorListing] = useState(false);
+  const [userListing, setUserListing] = useState([]);
   // console.log(formData);
   // console.log(formData);
   // console.log(fileperc);
@@ -121,7 +123,7 @@ function Profile() {
   const handleSingOut = async () => {
     try {
       dispatch(signoutUserStart());
-      const res = await fetch('/api/auth/signout');
+      const res = await fetch("/api/auth/signout");
       const data = await res.json();
       if (data.success === false) {
         // dispatch(signoutUserFailure(data.message));
@@ -131,11 +133,24 @@ function Profile() {
       }
       // dispatch(signoutUserSuccess(data))
       dispatch(deleteUserSuccess(data));
-
     } catch (error) {
       // dispatch(signoutUserFailure(data.message))
       dispatch(deleteUserFailure(error.message));
+    }
+  };
 
+  const handleShowListing = async () => {
+    try {
+      ShowErrorListing(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        ShowErrorListing(true);
+        return;
+      }
+      setUserListing(data);
+    } catch (error) {
+      ShowErrorListing(true);
     }
   };
 
@@ -205,11 +220,12 @@ function Profile() {
 
         {/* creating Listing */}
 
-        <Link  className="bg-green-800  font-bold text-white uppercase rounded-lg text-center px-5 py-3 hover:opacity-95 mr-2 mb-2" to={"/create-listing"}>
+        <Link
+          className="bg-green-800  font-bold text-white uppercase rounded-lg text-center px-5 py-3 hover:opacity-95 mr-2 mb-2"
+          to={"/create-listing"}
+        >
           Create Listing
         </Link>
-
-
       </form>
       <div className="flex justify-between mt-5 ">
         <span
@@ -229,6 +245,43 @@ function Profile() {
       <p className="text-green-700 font-bold">
         {updatesuccess ? "User is updated successfully" : ""}{" "}
       </p>
+      <button onClick={handleShowListing} className="text-green-700 w-full">
+        Show Listings
+      </button>
+      <p className="text-red-700 mt-5">
+        {showListing ? "Error showing Listing" : ""}
+      </p>
+      {userListing &&
+        userListing.length > 0 &&
+        <div className=" flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-2xl font-semibold">Your Listings</h1>
+          
+         { userListing.map((listing) => (
+            <div
+              key={listing._id}
+              className=" border rounded-lg p-3 flex  justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing cover"
+                  className="h-16 w-16 object-contain "
+                />
+              </Link>
+  
+              <Link
+                to={`/listing/${listing._id}`}
+                className="flex-1 text-slate-700 font-semibold   hover:underline truncate "
+              >
+                <p>{listing.name}</p>
+              </Link>
+              <div className=" flex flex-col items-center">
+                <button className="text-red-700 font-semibold uppercase"> delete</button>
+                <button className="text-green-700  font-semibold uppercase"> Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>}
     </div>
   );
 }
