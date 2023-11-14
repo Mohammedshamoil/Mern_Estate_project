@@ -154,6 +154,24 @@ function Profile() {
     }
   };
 
+  const handleListingDelete = async (listing_id) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listing_id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListing((prev) =>
+        prev.filter((listing) => listing._id !== listing_id)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="p-3 max-w-xl mx-auto">
       <h1 className="text-3xl font-bold text-center my-7">Profile</h1>
@@ -250,13 +268,15 @@ function Profile() {
       </button>
       <p className="text-red-700 mt-5">
         {showListing ? "Error showing Listing" : ""}
-      </p>
-      {userListing &&
-        userListing.length > 0 &&
+      </p> 
+     
+      {userListing && userListing.length > 0 && (
         <div className=" flex flex-col gap-4">
-          <h1 className="text-center mt-7 text-2xl font-semibold">Your Listings</h1>
-          
-         { userListing.map((listing) => (
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            Your Listings
+          </h1> 
+
+          {userListing.map((listing) => (
             <div
               key={listing._id}
               className=" border rounded-lg p-3 flex  justify-between items-center gap-4"
@@ -268,20 +288,30 @@ function Profile() {
                   className="h-16 w-16 object-contain "
                 />
               </Link>
-  
+
               <Link
                 to={`/listing/${listing._id}`}
-                className="flex-1 text-slate-700 font-semibold   hover:underline truncate "
+                className="flex-1 text-slate-700 font-bold   hover:underline truncate "
               >
                 <p>{listing.name}</p>
               </Link>
               <div className=" flex flex-col items-center">
-                <button className="text-red-700 font-semibold uppercase"> delete</button>
-                <button className="text-green-700  font-semibold uppercase"> Edit</button>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className="text-red-700 font-semibold uppercase"
+                >
+                  {" "}
+                  delete
+                </button>
+                <button className="text-green-700  font-semibold uppercase">
+                  {" "}
+                  Edit
+                </button>
               </div>
             </div>
           ))}
-        </div>}
+        </div>
+      )}
     </div>
   );
 }
