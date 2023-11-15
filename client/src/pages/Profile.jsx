@@ -123,7 +123,7 @@ function Profile() {
   const handleSingOut = async () => {
     try {
       dispatch(signoutUserStart());
-      const res = await fetch("/api/auth/signout");
+      const res = await fetch('/api/auth/signout');
       const data = await res.json();
       if (data.success === false) {
         // dispatch(signoutUserFailure(data.message));
@@ -268,13 +268,13 @@ function Profile() {
       </button>
       <p className="text-red-700 mt-5">
         {showListing ? "Error showing Listing" : ""}
-      </p> 
-     
+      </p>
+
       {userListing && userListing.length > 0 && (
         <div className=" flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
-          </h1> 
+          </h1>
 
           {userListing.map((listing) => (
             <div
@@ -303,10 +303,11 @@ function Profile() {
                   {" "}
                   delete
                 </button>
-                <button className="text-green-700  font-semibold uppercase">
-                  {" "}
-                  Edit
-                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700  font-semibold uppercase">
+                    Edit
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
