@@ -297,7 +297,9 @@ function UpdateListing() {
               />
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
-                <span className="text-sm">$ / month</span>
+                {formData.type === "rent" && (
+                  <span className="text-sm">($ / month)</span>
+                )}
               </div>
             </div>
             {formData.offer && (
@@ -314,7 +316,9 @@ function UpdateListing() {
                 />
                 <div className=" flex flex-col items-center">
                   <p>discount price</p>
-                  <span className="text-sm"> $ / month</span>
+                  {formData.type === "rent" && (
+                    <span className="text-sm">($ / month)</span>
+                  )}
                 </div>
               </div>
             )}
