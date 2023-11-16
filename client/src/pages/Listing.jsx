@@ -14,13 +14,17 @@ import {
   FaShare,
 } from "react-icons/fa";
 
+import { useSelector } from "react-redux";
+import Contact from "../Components/Contact";
 function Listing() {
   SwiperCore.use([Navigation]);
+  const {currentUser} = useSelector((state) => state.user);
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const[contact,setContact]=useState(false)
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -51,8 +55,7 @@ function Listing() {
         <p className="text-center my-7 text-2xl">Something went error </p>
       )}
       {listing && !loading && !error && (
-       
-        <div  >
+        <div>
           <Swiper navigation>
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
@@ -84,51 +87,62 @@ function Listing() {
             </p>
           )}
 
-          <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
-          <p className='text-2xl font-semibold'>
-              {listing.name} - ${' '}
+          <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
+            <p className="text-2xl font-semibold">
+              {listing.name} - ${" "}
               {listing.offer
-                ? listing.discountPrice.toLocaleString('en-US')
-                : listing.regularPrice.toLocaleString('en-US')}
-              {listing.type === 'rent' && ' / month'}
+                ? listing.discountPrice.toLocaleString("en-US")
+                : listing.regularPrice.toLocaleString("en-US")}
+              {listing.type === "rent" && " / month"}
             </p>
             <p className=" flex items-center gap-2 text-slate-600 mt-6  font-semibold text-xl">
-              <FaMapMarkedAlt className="text-green-700"/>
+              <FaMapMarkedAlt className="text-green-700" />
               {listing.address}
             </p>
-            <div className='flex gap-4'>
-              <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md '>
-                {listing.type === 'rent' ? 'For Rent' : 'For Sale'}
+            <div className="flex gap-4">
+              <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md ">
+                {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
               {listing.offer && (
-                <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                   ${+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
             </div>
 
-            <p className='text-slate-800'>
-              <span className='font-bold text-black'>Description -{' '} </span>
+            <p className="text-slate-800">
+              <span className="font-bold text-black">Description - </span>
               {listing.description}
             </p>
             <ul className=" flex flex-wrap gap-4 items-center sm:gap-6 text-green-900 font-semibold text-sm">
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaBed className="text-lg font"/>
-                {listing.bedrooms>1 ?`${listing.bedrooms} beds`: `${listing.bedrooms} bed`}
+                <FaBed className="text-lg font" />
+                {listing.bedrooms > 1
+                  ? `${listing.bedrooms} beds`
+                  : `${listing.bedrooms} bed`}
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaBath className="text-lg font"/>
-                {listing.bathrooms>1 ?`${listing.bathrooms} baths`: `${listing.bathrooms} bath`}
+                <FaBath className="text-lg font" />
+                {listing.bathrooms > 1
+                  ? `${listing.bathrooms} baths`
+                  : `${listing.bathrooms} bath`}
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaParking className="text-lg font"/>
-                {listing.parking? " parking spot":" no parking"  }
+                <FaParking className="text-lg font" />
+                {listing.parking ? " parking spot" : " no parking"}
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaChair className="text-lg font"/>
-                {listing.parking? "Furnished":" UnFurnished"  }
+                <FaChair className="text-lg font" />
+                {listing.parking ? "Furnished" : " UnFurnished"}
               </li>
             </ul>
+            {currentUser && listing.userRef != currentUser._id && !contact && (
+              <button onClick={()=>setContact(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+                contact Landlord
+              </button>
+            )}
+            {/* conatct form */}
+            {contact && <Contact listing={listing}></Contact>}
           </div>
         </div>
       )}
