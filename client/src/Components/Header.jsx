@@ -33,7 +33,7 @@ function Header() {
         </Link>
         <form
           onSubmit={handleSubmit}
-          className="bg-slate-100 rounded-lg flex p-3 items-center "
+          className="bg-slate-100 rounded-lg flex p-3 items-center rounded-lg"
         >
           <input
             type="text"
@@ -42,7 +42,7 @@ function Header() {
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
-            className="bg-transparent text-lg focus:outline-none w-24 sm:w-96"
+            className="bg-transparent text-xs sm:text-sm focus:outline-none w-24 sm:w-96"
           />
           <button>
             <FaSearch className=" text-slate-600 "></FaSearch>
