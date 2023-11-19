@@ -63,20 +63,20 @@ function Signin() {
         <input
           type="email"
           placeholder="Email"
-          className="border p-4 text-lg rounded-lg  "
+          className="border p-3 text-lg rounded-lg  "
           onChange={handleChange}
           id="email"
         />
         <input
           type="password"
           placeholder="Password"
-          className="border  p-4 text-lg rounded-lg "
+          className="border  p-3 text-lg rounded-lg "
           onChange={handleChange}
           id="password"
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white  p-4 text-lg  rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-slate-700 text-white  p-3 text-lg  rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
           {loading ? "Loading ..." : "Sign in"}
         </button>
