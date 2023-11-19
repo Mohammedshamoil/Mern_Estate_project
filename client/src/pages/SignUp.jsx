@@ -52,27 +52,27 @@ function SignUp() {
         <input
           type="text"
           placeholder="username"
-          className="border p-4 rounded-lg "
+          className="border p-3 rounded-lg "
           onChange={handleChange}
           id="username"
         />
         <input
           type="email"
           placeholder="email"
-          className="border  p-4   rounded-lg  "
+          className="border  p-3   rounded-lg  "
           onChange={handleChange}
           id="email"
         />
         <input
           type="password"
           placeholder="password"
-          className="border  p-4  rounded-lg "
+          className="border  p-3  rounded-lg "
           onChange={handleChange}
           id="password"
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white  p-4 text-lg  rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-slate-700 text-white  p-3 text-lg  rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
           {loading ? "Loading ..." : "Sign Up"}
         </button>
